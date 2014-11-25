@@ -1,0 +1,29 @@
+---
+- name: Configure Cloudera APT key
+  apt_key: url="http://archive.cloudera.com/cdh5/ubuntu/{{ ansible_distribution_release }}/amd64/cdh/archive.key"
+           state=present
+
+- name: Configure the Cloudera APT repositories
+  apt_repository: repo="deb [arch=amd64] http://archive.cloudera.com/cdh5/ubuntu/{{ ansible_distribution_release }}/amd64/cdh {{ ansible_distribution_release }}-cdh5 contrib"
+                  state=present
+
+- name: Install Zookeeper
+  apt: pkg=zookeeper-server={{ zookeeper_version }} state=present
+
+- name: Check if Zookeeper has been initialized
+  stat: path={{ zookeeper_data_dir }}/myid
+  register: zookeeper_id_file
+
+- name: Initialize Zookeeper
+  command: "service zookeeper-server init --force --myid={{ 255 | random }}"
+  when: not zookeeper_id_file.stat.exists
+  notify:
+    - Restart Zookeeper
+
+- name: Configure Zookeeper
+  template: src=zoo.cfg.j2 dest={{ zookeeper_conf_dir }}/zoo.cfg
+  notify:
+    - Restart Zookeeper
+
+- name: Enable and start the Zookeeper service
+  service: name=zookeeper-server enabled=yes state=started
