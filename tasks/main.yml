@@ -7,6 +7,9 @@
   apt_repository: repo="deb [arch=amd64] http://archive.cloudera.com/cdh5/ubuntu/{{ ansible_distribution_release }}/amd64/cdh {{ ansible_distribution_release }}-cdh5 contrib"
                   state=present
 
+- name: Pin Cloudera APT repositories
+  template: src=cdh5.j2 dest=/etc/apt/preferences.d/cdh5
+
 - name: Install Zookeeper
   apt: pkg=zookeeper-server={{ zookeeper_version }} state=present
 
