@@ -5,6 +5,7 @@ An Ansible role for installing [Apache Zookeeper](http://zookeeper.apache.org).
 ## Role Variables
 
 - `zookeeper_version` - Zookeeper version.
+- `zookeeper_cloudera_distribution` - Cloudera distribution version (default: `cdh5.4`)
 - `zookeeper_conf_dir` - Configuration directory for Zookeeper (default: `/etc/zookeeper/conf`)
 - `zookeeper_data_dir`: Data directory for Zookeeper (default: `/var/lib/zookeeper`)
 - `zookeeper_max_client_connections` - Maximum number of client connections (default: `50`)
