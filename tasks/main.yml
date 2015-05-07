@@ -28,5 +28,13 @@
   notify:
     - Restart Zookeeper
 
+- name: Configure JAVA_OPTS
+  when: zookeeper_java_opts
+  copy:
+    content: "{{ zookeeper_java_opts }}"
+    dest: "{{ zookeeper_conf_dir }}/java.env"
+  notify:
+    - Restart Zookeeper
+
 - name: Enable and start the Zookeeper service
   service: name=zookeeper-server enabled=yes state=started
