@@ -18,7 +18,7 @@
   register: zookeeper_id_file
 
 - name: Initialize Zookeeper
-  command: "service zookeeper-server init --force --myid={{ 255 | random }}"
+  command: "service zookeeper-server init --force --myid={{ zookeeper_myid }}"
   when: not zookeeper_id_file.stat.exists
   notify:
     - Restart Zookeeper
