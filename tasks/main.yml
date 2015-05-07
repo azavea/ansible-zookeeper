@@ -18,13 +18,21 @@
   register: zookeeper_id_file
 
 - name: Initialize Zookeeper
-  command: "service zookeeper-server init --force --myid={{ 255 | random }}"
+  command: "service zookeeper-server init --force --myid={{ zookeeper_myid }}"
   when: not zookeeper_id_file.stat.exists
   notify:
     - Restart Zookeeper
 
 - name: Configure Zookeeper
   template: src=zoo.cfg.j2 dest={{ zookeeper_conf_dir }}/zoo.cfg
+  notify:
+    - Restart Zookeeper
+
+- name: Configure JAVA_OPTS
+  when: zookeeper_java_opts
+  copy:
+    content: "{{ zookeeper_java_opts }}"
+    dest: "{{ zookeeper_conf_dir }}/java.env"
   notify:
     - Restart Zookeeper
 
