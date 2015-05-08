@@ -28,5 +28,12 @@
   notify:
     - Restart Zookeeper
 
+- name: Configure SERVER_JVMFLAGS
+  lineinfile: dest=/etc/default/zookeeper
+              regexp="SERVER_JVMFLAGS"
+              line="export SERVER_JVMFLAGS=\"{{ zookeeper_server_jvmflags }}\""
+  notify:
+    - Restart Zookeeper
+
 - name: Enable and start the Zookeeper service
   service: name=zookeeper-server enabled=yes state=started
