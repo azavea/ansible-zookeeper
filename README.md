@@ -13,6 +13,7 @@ An Ansible role for installing [Apache Zookeeper](http://zookeeper.apache.org).
 - `zookeeper_initial_limit` - Initial synchronization tick limit (default: `100`)
 - `zookeeper_sync_limit` - Synchronization limit for acknowledgement (default: `5`)
 - `zookeeper_client_port` - Port Zookeeper binds to. (default: `2181`)
+- `zookeeper_myid` - Zookeeper `myid` (default: `0`)
 - `zookeeper_servers` - Members of the Zookeeper cluster. Defaults to:
 
 ```yaml
