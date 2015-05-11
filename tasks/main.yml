@@ -18,13 +18,20 @@
   register: zookeeper_id_file
 
 - name: Initialize Zookeeper
-  command: "service zookeeper-server init --force --myid={{ 255 | random }}"
+  command: "service zookeeper-server init --force --myid={{ zookeeper_myid }}"
   when: not zookeeper_id_file.stat.exists
   notify:
     - Restart Zookeeper
 
 - name: Configure Zookeeper
   template: src=zoo.cfg.j2 dest={{ zookeeper_conf_dir }}/zoo.cfg
+  notify:
+    - Restart Zookeeper
+
+- name: Configure SERVER_JVMFLAGS
+  lineinfile: dest=/etc/default/zookeeper
+              regexp="SERVER_JVMFLAGS"
+              line="export SERVER_JVMFLAGS=\"{{ zookeeper_server_jvmflags }}\""
   notify:
     - Restart Zookeeper
 
